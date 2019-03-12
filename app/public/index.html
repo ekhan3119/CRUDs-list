@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <title>CRUDslist</title>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="jumbotron">
+                    <h1>CRUDs List</h1>
+                    <p>Place to sell your stuff</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="items" class="col-md-6">
+                <h2>Products</h2>
+                <!--add items from the database-->
+
+            </div>
+            <div class="col-md-6">
+                <label for="productName">Product Name</label>
+                <input id='productName' class="form-control" type="text" placeholder="Product Name">
+                <label for="productPrice">Product Price</label>
+                <input id='productPrice' class="form-control" type="text" placeholder="product Price">
+                <label for="productCategory">Product Category</label>
+                <input id='productCategory' class="form-control" type="text" placeholder="product Category"><br>
+                <button class="btn btn-success">Save</button>
+            </div>
+        </div>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+
+    <script>
+
+        //javaScript to get the data from database
+        //AJAX
+        $(document).ready(function () {
+            axios.get("api/all").then(response =>
+                response.data.forEach(item => $('#items')
+                    .append(`<p>${item.name} - $${item.price}</p>`))
+
+            );
+
+            $(".btn-success").click(function () {
+                axios.post("api/new", {
+                    name: $("#productName").val().trim(),
+                    price: $("#productPrice").val().trim(),
+                    category: $("#productCategory").val().trim()
+
+                }).then(response => $("#items").append(`<p>${response.data.name} - $${response.data.price}`));
+
+            });
+
+        });
+        //we need add the items to the screen
+    </script>
+
+</body>
+
+</html>
